@@ -1,0 +1,35 @@
+#networks:
+#  ip6net:
+#     enable_ipv6: true
+#     ipam:
+#       config:
+#         - subnet: 2001:db8::/64
+
+services:
+  bun_redis_test:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: dev
+    volumes:
+      - ./:/src
+    environment:
+      PORT: 8080
+      REDIS_HOST: redis_db
+      REDIS_PORT: 6379
+      REDIS_TLS_DISABLED: true
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis_db
+#    networks:
+#      - ip6net
+
+  redis_db:
+    image: redis
+    restart: always
+#    networks:
+#      - ip6net
+    ports:
+      - "6379:6379"
+
